@@ -1,52 +1,36 @@
-# Rails7 + PostgreSQL環境構築
+# github actions 使い方(rails)
 
+- github の actions へ行き、ruby on rails を選択するとテンプレートがあるのでそちらを利用する。
+  他のプログラミングやフレームワークの場合は適宜変更する
 
-①Gemfile, Gemfile.lock, Dockerfile,docker-compose.ymlファイルを作成する　　
+- 必要な gem を入れる or github actions の yml ファイルから不必要な実行を消す
 
+### yml ファイル内について
 
-②Gemfile, Dockerfile,docker-compose.ymlを編集する　　
+github actions の設定ファイルは、.github/workflows/ディレクトリに配置する。
+on:
+push:
+branches: ["main", "develop"]
+pull_request:
+branches: ["main", "develop"]
+で実行するブランチを指定できる。すべてのブランチで実行する場合は branches をコメントアウトする。
 
-＊備考
+name: は、GitHub Actions の画面で表示されるジョブの名前。わかりやすい名前をつけると良い。
+run: は、ジョブの実行内容を記述する。コマンドを記述する。
+on: は、ジョブを実行するタイミングを指定する。push, pull_request, schedule, workflow_dispatch などが指定できる。
+jobs: は、ジョブの設定を記述する。複数のジョブを記述することができる。
+runs-on: は、ジョブを実行する環境を指定する。ubuntu-latest, ubuntu-20.04, ubuntu-18.04, windows-latest, windows-2019, macos-latest, macos-10.15 などが指定できる。
 
-・NameError: uninitialized constant Gem::Sourceのエラーが出たため、Bundlerをアップデートするために、Dockerfileにgem update --systemおよびbundle update --bundlerを実行するように修正
+#### 今回作成で気づいたこと
 
-・Rails 7ではWebpackerが標準では組み込まれなくなったので、yarnやnodejsのインストールが不要になった。　　
+- GitHub Actions の実行環境で使用されている Ruby のバージョン指定すること
 
+```yml
+- name: Install Ruby and gems
+  uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
+  with:
+    ruby-version: 3.2.0 #この箇所
+    bundler-cache: true
+```
 
-③docker compose run --rm web rails new . --force --database=postgresqlを実行　　
-
-
-④database.ymlファイル設定編集。　　
-
-*rails new を実行したことにより、 Gemfile が変更されるので、新しい gem をインストールするために、コンテナを再ビルドして起動。　　
-
-docker compose build (docker compose up --build)　　
-
-docker compose up　　
-
-
-⑤データベースの作成　　
-
-docker compose exec web rails db:create　　
-
-railsが起動できる状態になる　　
-
-参考サイト　　
-
-https://zenn.dev/hs7/articles/2cc4d67650ba69　　
-
-https://zenn.dev/lirais/articles/fe240a0c248783　　
-
-https://docs.docker.jp/compose/rails.html?highlight=rails　　
-
-https://qiita.com/croquette0212/items/7b99d9339fd773ddf20b　　
-
-https://qiita.com/P-man_Brown/items/32fdba14e88219f8d2f0　　
-
-https://qiita.com/P-man_Brown/items/32fdba14e88219f8d2f0　　
-
-https://qiita.com/koyo-miyamura/items/5f1d123046917782e111　　
-
-https://gist.github.com/kkmory/400a0faf95f2d3b2c7638b55fc0f4a9a
-
-https://abillyz.com/watanabe/studies/244
+プロジェクトに合わせて適宜編集しましょう
