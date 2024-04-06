@@ -26,6 +26,7 @@ end
 group :development do
   gem "web-console"
   gem 'bundler-audit'
+  gem 'brakeman', :require => false
 end
 
 group :test do
