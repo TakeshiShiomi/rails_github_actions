@@ -4,12 +4,25 @@
 #
 # This workflow will install a prebuilt Ruby version, install dependencies, and
 # run tests and linters.
+
+# 勉強メモ
+# github actionsの設定ファイルは、.github/workflows/ディレクトリに配置する。
+# on:
+# push:
+#   branches: ["main", "develop"]
+# pull_request:
+#   branches: ["main", "develop"]
+# で実行するブランチを指定できる。すべてのブランチで実行する場合はコメントアウトする。
+
+# name: は、GitHub Actionsの画面で表示されるジョブの名前。わかりやすい名前をつけると良い。
+# run: は、ジョブの実行内容を記述する。コマンドを記述する。
+# on: は、ジョブを実行するタイミングを指定する。push, pull_request, schedule, workflow_dispatch などが指定できる。
+# jobs: は、ジョブの設定を記述する。複数のジョブを記述することができる。
+# runs-on: は、ジョブを実行する環境を指定する。ubuntu-latest, ubuntu-20.04, ubuntu-18.04, windows-latest, windows-2019, macos-latest, macos-10.15 などが指定できる。
 name: "Ruby on Rails CI"
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -51,8 +64,10 @@ jobs:
           bundler-cache: true
       # Add or replace any other lints here
       - name: Security audit dependencies
-        run: bin/bundler-audit --update
+        run: bundle exec bundler-audit check --update
       - name: Security audit application code
-        run: bin/brakeman -q -w2
+        run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
-        run: bin/rubocop --parallel
+        run: bundle exec rubocop --parallel
+      - name: Rspec tests
+        run: bundle exec rspec
