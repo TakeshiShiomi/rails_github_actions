@@ -53,6 +53,8 @@ jobs:
         run: bin/rails db:create db:schema:load --trace
       - name: Run tests
         run: bin/rake
+      - name: Rspec tests
+        run: bundle exec rspec
 
   lint:
     runs-on: ubuntu-latest
@@ -71,5 +73,3 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
-      - name: Rspec tests
-        run: bundle exec rspec
