@@ -33,7 +33,7 @@ jobs:
           - "5432:5432"
         env:
           POSTGRES_DB: rails_test
-          POSTGRES_USER: rails
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
     env:
       RAILS_ENV: test
