@@ -38,9 +38,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       RAILS_ENV: test
-      POSTGRES_HOST: postgres
-      RAILS_DATABASE_USER: postgres
-      RAILS_DATABASE_PASSWORD: password
+      DATABASE_URL: "postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/myapp_test"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -52,7 +50,7 @@ jobs:
       - name: Wait for PostgreSQL to become ready
         run: sleep 10
       - name: Set up database schema
-        run: bin/rails db:schema:load
+        run: bin/rails db:create db:schema:load --trace
       - name: Run tests
         run: bin/rake
 
