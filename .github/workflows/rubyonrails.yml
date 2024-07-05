@@ -42,6 +42,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       # Add or replace dependency steps here
+      - name: Set up environment variables
+        run: |
+          echo "RAILS_ENV=test" >> $GITHUB_ENV
+          echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/rails_test" >> $GITHUB_ENV
+
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
@@ -59,6 +64,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up environment variables
+        run: echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/rails_test" >> $GITHUB_ENV
+
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
@@ -72,5 +81,5 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
-      - name: Rspec tests
+      - name: Run Rspec tests
         run: bundle exec rspec
