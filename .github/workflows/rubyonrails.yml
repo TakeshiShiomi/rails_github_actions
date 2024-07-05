@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11-alpine #バージョン指定
+        image: postgres:16.3 #バージョン指定
         ports:
           - "5432:5432"
         env:
