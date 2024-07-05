@@ -23,6 +23,7 @@ runs-on: は、ジョブを実行する環境を指定する。ubuntu-latest, ub
 
 #### 今回作成で気づいたこと
 
+- rspec は test で実行する、lint だと DB 設定またしないといけない
 - GitHub Actions の実行環境で使用されている Ruby のバージョン指定すること
 
 ```yml
