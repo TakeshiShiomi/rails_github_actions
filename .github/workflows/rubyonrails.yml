@@ -28,22 +28,22 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16.3 #バージョン指定
+        image: postgres:11-alpine
         ports:
           - "5432:5432"
         env:
-          POSTGRES_DB: myapp_development
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
     env:
       RAILS_ENV: test
-      DATABASE_URL: "postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/myapp_development"
+      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
       # Add or replace dependency steps here
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
         with:
           ruby-version: 3.2.0 # GitHub Actionsの実行環境で使用されているRubyのバージョン指定
           bundler-cache: true
@@ -58,15 +58,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up environment variables
-        run: echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/rails_test" >> $GITHUB_ENV
-
+        uses: actions/checkout@v3
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
         with:
-          ruby-version: 3.2.0
           bundler-cache: true
       # Add or replace any other lints here
       # bundler-auditは定期的にgemのupgradeを警告するので、コメントアウト
@@ -76,5 +71,5 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
-      - name: Run Rspec tests
+      - name: Rspec tests
         run: bundle exec rspec
