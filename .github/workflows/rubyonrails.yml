@@ -47,8 +47,6 @@ jobs:
         with:
           ruby-version: 3.2.0 # GitHub Actionsの実行環境で使用されているRubyのバージョン指定
           bundler-cache: true
-      - name: Wait for PostgreSQL to become ready
-        run: sleep 10
       - name: Set up database schema
         run: bin/rails db:create db:schema:load --trace
       - name: Run tests
